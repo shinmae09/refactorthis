@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using RefactorThis.Persistence;
+using RefactorThis.Persistence.Entities.Models;
+using RefactorThis.Persistence.Repositories;
 
 namespace RefactorThis.Domain
 {

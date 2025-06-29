@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using RefactorThis.Persistence;
+using RefactorThis.Persistence.Entities.Models;
 
 namespace RefactorThis.Domain.Tests
 {

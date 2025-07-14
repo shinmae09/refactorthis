@@ -1,10 +1,12 @@
-using System;
-using System.Threading.Tasks;
 using RefactorThis.Domain.Constants;
 using RefactorThis.Domain.Factories;
+using RefactorThis.Persistence.Entities.Enums;
+using RefactorThis.Persistence.Entities.Models;
 using RefactorThis.Persistence.Extensions;
 using RefactorThis.Persistence.Interfaces;
 using RefactorThis.Persistence.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace RefactorThis.Domain
 {
@@ -31,8 +33,29 @@ namespace RefactorThis.Domain
                 return validationResponse;
             }
 
-            var invoiceHandler = InvoiceHandlerFactory.CreateInvoiceHandler(invoice, payment);
-            var result = invoiceHandler.HandleInvoiceAndPayment();
+            var invoiceHandler = InvoiceHandlerFactory.CreateInvoiceHandler(invoice);
+            var result = invoiceHandler.HandleInvoiceAndPayment(payment);
+            await _invoiceRepository.UpdateAsync(invoice);
+
+            return result;
+        }
+
+        public async Task<string> ProcessRefund(string reference, Refund refund)
+        {
+            var invoice = await _invoiceRepository.GetInvoiceByReferenceAsync(reference);
+            if (invoice == null)
+            {
+                throw new InvalidOperationException(ValidationMessage.NO_INVOICE_FOUND_MESSAGE);
+            }
+
+            if (invoice.Type != InvoiceType.Commercial)
+            {
+                return ReturnMessage.REFUNDS_ONLY_FOR_COMMERCIAL_INVOICES_MESSAGE;
+            }
+
+            var invoiceHandler = InvoiceHandlerFactory.CreateInvoiceHandler(invoice);
+            var result = invoiceHandler.HandleRefund(refund);
+
             await _invoiceRepository.UpdateAsync(invoice);
 
             return result;

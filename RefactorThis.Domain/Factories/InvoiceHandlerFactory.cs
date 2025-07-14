@@ -7,14 +7,14 @@ namespace RefactorThis.Domain.Factories
 {
     public class InvoiceHandlerFactory
     {
-        public static InvoiceHandler CreateInvoiceHandler(Invoice invoice, Payment payment)
+        public static InvoiceHandler CreateInvoiceHandler(Invoice invoice)
         {
             switch (invoice.Type)
             {
                 case InvoiceType.Standard:
-                    return new StandardInvoiceHandler(invoice, payment);
+                    return new StandardInvoiceHandler(invoice);
                 case InvoiceType.Commercial:
-                    return new CommercialInvoiceHandler(invoice, payment);
+                    return new CommercialInvoiceHandler(invoice);
                 default:
                     throw new ArgumentException(ValidationMessage.INVALID_INVOICE_TYPE_MESSAGE, nameof(invoice.Type));
             }

@@ -1,4 +1,5 @@
 using RefactorThis.Persistence.Entities.Enums;
+using RefactorThis.Persistence.Entities.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,8 @@ namespace RefactorThis.Persistence.Models
         public string Reference { get; set; }
         public decimal Amount { get; set; }
         public decimal TaxAmount { get; set; }
-        public List<Payment> Payments { get; set; }
+        public List<Payment> Payments { get; set; } = new List<Payment>();
+        public List<Refund> Refunds { get; set; } = new List<Refund>();
         public InvoiceType Type { get; set; }
 
         public decimal GetAmountDue()
@@ -22,5 +24,6 @@ namespace RefactorThis.Persistence.Models
         {
             return this.Payments != null && this.Payments.Any();
         }
+
     }
 }

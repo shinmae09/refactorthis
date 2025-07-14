@@ -1,23 +1,44 @@
 ﻿using RefactorThis.Domain.Constants;
+using RefactorThis.Persistence.Entities.Enums;
+using RefactorThis.Persistence.Entities.Models;
 using RefactorThis.Persistence.Extensions;
 using RefactorThis.Persistence.Models;
+using System.Linq;
 
 namespace RefactorThis.Domain.Factories
 {
     public abstract class InvoiceHandler
     {
         protected Invoice _invoice;
-        protected Payment _payment;
 
-        public InvoiceHandler(Invoice invoice, Payment payment)
+        public InvoiceHandler(Invoice invoice)
         {
             _invoice = invoice.ThrowIfNull(nameof(invoice));
-            _payment = payment.ThrowIfNull(nameof(payment));
         }
 
-        public virtual string HandleInvoiceAndPayment()
+        public virtual string HandleRefund(Refund refund)
         {
-            _invoice.Payments.Add(_payment);
+            if (_invoice.HasPayments())
+            {
+                var totalAmountPaid = _invoice.Payments.Sum(p => p.Amount);
+                if (refund.Amount > totalAmountPaid)
+                {
+                    return ReturnMessage.REFUND_AMOUNT_EXCEEDS_TOTAL_PAID_MESSAGE;
+                }
+
+                _invoice.Refunds.Add(refund);
+            }
+            else
+            {
+                return ReturnMessage.REFUND_CANNOT_BE_PROCESSED_NO_PAYMENTS_MADE_ON_INVOICE_MESSAGE;
+            }
+
+            return ReturnMessage.REFUND_PROCESSED_SUCCESSFULLY_MESSAGE;
+        }
+
+        public virtual string HandleInvoiceAndPayment(Payment payment)
+        {
+            _invoice.Payments.Add(payment);
 
             if (_invoice.GetAmountDue() <= 0)
             {

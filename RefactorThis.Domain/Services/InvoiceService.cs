@@ -12,7 +12,7 @@ namespace RefactorThis.Domain
 {
     public class InvoiceService
     {
-        private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IInvoiceRepository _invoiceRepository;  
 
         public InvoiceService(IInvoiceRepository invoiceRepository)
         {

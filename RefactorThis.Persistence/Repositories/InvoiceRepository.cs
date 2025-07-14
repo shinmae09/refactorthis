@@ -5,6 +5,7 @@ using RefactorThis.Persistence.Interfaces;
 using RefactorThis.Persistence.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RefactorThis.Persistence
@@ -60,6 +61,13 @@ namespace RefactorThis.Persistence
 
             _invoices.Remove(invoice);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Invoice>> GetOverdueInvoiceAsync()
+        {
+            return await _invoices
+                .Where(i => i.DueDate < DateTime.UtcNow && i.Amount > 0)
+                .ToListAsync();
         }
     }
 }

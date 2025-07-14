@@ -1,5 +1,4 @@
 ﻿using RefactorThis.Domain.Constants;
-using RefactorThis.Persistence.Entities.Enums;
 using RefactorThis.Persistence.Entities.Models;
 using RefactorThis.Persistence.Extensions;
 using RefactorThis.Persistence.Models;

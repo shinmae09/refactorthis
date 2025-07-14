@@ -1,4 +1,5 @@
 ﻿using RefactorThis.Persistence.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RefactorThis.Persistence.Interfaces
@@ -11,5 +12,7 @@ namespace RefactorThis.Persistence.Interfaces
         /// <param name="reference"></param>
         /// <returns></returns>
         Task<Invoice> GetInvoiceByReferenceAsync(string reference);
+
+        Task<IEnumerable<Invoice>> GetOverdueInvoiceAsync();
     }
 }
